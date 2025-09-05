@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   tetris-app:
@@ -13,11 +13,10 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
       interval: 30s
       timeout: 30s
       retries: 3
-      start_period: 40s
     networks:
       - tetris-network
 

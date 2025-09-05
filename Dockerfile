@@ -35,6 +35,9 @@ RUN npm run build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
+# Install wget for health checks
+RUN apk add --no-cache wget
+
 # Set production environment
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -66,7 +69,7 @@ ENV PORT=3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
+  CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
 
 # Start the application
 CMD ["node", "server.js"]

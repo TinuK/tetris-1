@@ -19,7 +19,7 @@ import { ScorePanel } from './ScorePanel';
 
 export function TetrisGame() {
   const [gameState, setGameState] = useState<TetrisGameState>(() => createInitialGameState());
-  const gameLoopRef = useRef<number>();
+  const gameLoopRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
   const keysPressed = useRef<Set<string>>(new Set());
   const keyRepeatTimers = useRef<Map<string, number>>(new Map());

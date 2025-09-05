@@ -307,7 +307,7 @@ function lockActivePiece(gameState: TetrisGameState): TetrisGameState {
   }
   
   // Update drop time based on new level
-  let updatedGameState = {
+  let updatedGameState: TetrisGameState = {
     ...gameState,
     board: clearedBoard,
     activePiece: newActivePiece,
