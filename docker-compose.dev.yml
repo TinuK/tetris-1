@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  tetris-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: tetris-development
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true  # Enable polling for better file watching in containers
+    volumes:
+      # Mount source code for hot reloading
+      - .:/app
+      # Prevent node_modules from being overwritten
+      - /app/node_modules
+      # Prevent .next from being overwritten during development
+      - /app/.next
+    restart: unless-stopped
+    stdin_open: true  # Keep STDIN open for interactive debugging
+    tty: true         # Allocate a pseudo-TTY
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - tetris-dev-network
+
+networks:
+  tetris-dev-network:
+    driver: bridge

@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  tetris-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tetris-production
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 40s
+    networks:
+      - tetris-network
+
+networks:
+  tetris-network:
+    driver: bridge

@@ -6,7 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docker:build": "docker build -t tetris-app .",
+    "docker:build-dev": "docker build -f Dockerfile.dev -t tetris-app-dev .",
+    "docker:run": "docker run -p 3000:3000 --name tetris-container tetris-app",
+    "docker:run-dev": "docker run -p 3000:3000 -v $(pwd):/app -v /app/node_modules --name tetris-dev-container tetris-app-dev",
+    "docker:stop": "docker stop tetris-container tetris-dev-container || true",
+    "docker:clean": "docker rm tetris-container tetris-dev-container || true && docker rmi tetris-app tetris-app-dev || true",
+    "docker:compose": "docker-compose up -d",
+    "docker:compose-dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:compose-down": "docker-compose down && docker-compose -f docker-compose.dev.yml down || true"
   },
   "dependencies": {
     "react": "19.1.0",

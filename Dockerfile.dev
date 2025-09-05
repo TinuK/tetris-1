@@ -1,0 +1,37 @@
+# Development Dockerfile for Next.js Tetris App
+# Optimized for development with hot reloading
+
+FROM node:18-alpine
+
+# Install dependencies for better compatibility
+RUN apk add --no-cache libc6-compat
+
+# Set working directory
+WORKDIR /app
+
+# Set development environment
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install all dependencies (including devDependencies)
+RUN npm ci
+
+# Copy source code (will be overridden by volume mount in development)
+COPY . .
+
+# Expose development port
+EXPOSE 3000
+
+# Set hostname for external access
+ENV HOSTNAME="0.0.0.0"
+ENV PORT=3000
+
+# Health check for development
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost:3000/ || exit 1
+
+# Start development server with Turbopack
+CMD ["npm", "run", "dev"]
